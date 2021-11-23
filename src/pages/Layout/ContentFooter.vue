@@ -4,23 +4,23 @@
       <nav>
         <ul>
           <li>
-            <a href="https://www.creative-tim.com">Creative Tim</a>
+            <a href="#/users">Users</a>
           </li>
           <li>
-            <a href="https://creative-tim.com/presentation"> About Us </a>
+            <a href="#/teams">Teams</a>
           </li>
           <li>
-            <a href="http://blog.creative-tim.com"> Blog </a>
+            <a href="#/meetings">Meetings</a>
           </li>
           <li>
-            <a href="https://www.creative-tim.com/license"> Licenses </a>
+            <a href="#/support">Support</a>
           </li>
         </ul>
       </nav>
       <div class="copyright text-center">
         &copy; {{ new Date().getFullYear() }}
-        <a href="https://www.creative-tim.com/?ref=mdf-vuejs" target="_blank"
-          >Creative Tim</a
+        <a href="#" target="_blank"
+          >Meeting App</a
         >, made with <i class="fa fa-heart heart"></i> for a better web
       </div>
     </div>
