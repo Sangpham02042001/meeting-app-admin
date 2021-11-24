@@ -3,6 +3,8 @@ import services from '../../services/team'
 const team = {
   state: {
     teams: [],
+    paginationNumber: 10,
+    paginationOffset: 0,
     isLoaded: false,
     error: null
   },
@@ -14,6 +16,9 @@ const team = {
   mutations: {
     getAllTeams(state, { teams }) {
       state.teams = teams
+    },
+    changePaginationOffset(state, { num }) {
+      state.paginationOffset += num
     }
   },
   actions: {
