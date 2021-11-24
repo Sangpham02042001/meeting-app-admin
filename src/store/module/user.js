@@ -1,6 +1,5 @@
 const user = {
     state: {
-
     },
     getters: {
 
@@ -10,7 +9,6 @@ const user = {
 
     },
     actions: {
-
     }
 }
 export default user;
