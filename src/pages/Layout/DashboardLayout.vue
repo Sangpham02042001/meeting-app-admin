@@ -17,7 +17,7 @@
       </sidebar-link>
       <sidebar-link to="/teams">
         <md-icon>groups</md-icon>
-        <p>Team</p>
+        <p>Teams</p>
       </sidebar-link>
       <sidebar-link to="/meetings">
         <md-icon>contact_phone</md-icon>

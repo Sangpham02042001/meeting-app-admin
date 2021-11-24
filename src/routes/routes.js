@@ -2,9 +2,10 @@ import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 import Dashboard from "@/pages/Dashboard.vue";
 import Profile from "@/pages/Profile.vue";
 import User from "@/pages/User.vue";
-import Team from "@/pages/Team.vue";
+import Teams from "@/pages/Teams.vue";
 import Meeting from "@/pages/Meeting.vue";
 import Support from "@/pages/Support.vue";
+import Team from '../components/Team/Team.vue'
 
 const routes = [
   {
@@ -25,12 +26,17 @@ const routes = [
       {
         path: "users",
         name: "Users",
-        component: User,
+        component: User
       },
       {
         path: "teams",
         name: "Teams",
-        component: Team,
+        component: Teams,
+      },
+      {
+        path: 'teams/:teamId',
+        name: 'Team',
+        component: Team
       },
       {
         path: "meetings",
