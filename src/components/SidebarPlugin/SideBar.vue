@@ -47,7 +47,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: "Meeting App",
+      default: "Meeting Admin",
     },
     sidebarBackgroundImage: {
       type: String,

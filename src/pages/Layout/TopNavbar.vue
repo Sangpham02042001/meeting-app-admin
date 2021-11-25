@@ -62,10 +62,48 @@
               </a>
             </li>
 
-            <md-list-item href="#/profile">
+            <li class="md-list-item">
+              <a
+                href="#"
+                class="
+                  md-list-item-router md-list-item-container md-button-clean
+                  dropdown
+                "
+              >
+                <div class="md-list-item-content">
+                  <drop-down>
+                    <md-button
+                      slot="title"
+                      class="md-button md-just-icon md-simple"
+                      data-toggle="dropdown"
+                    >
+                      <i class="material-icons">person</i>
+                      <p class="hidden-lg hidden-md">Profile</p>
+                      <p class="hidden-lg hidden-md">Notifications</p>
+                    </md-button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                      <li>
+                        <a href="#/profile"
+                          ><md-icon style="margin-right: 15px">person</md-icon
+                          >Profile</a
+                        >
+                      </li>
+                      <li>
+                        <a href="#" @click="handleLogout"
+                          ><md-icon style="margin-right: 15px">logout</md-icon
+                          >Log out</a
+                        >
+                      </li>
+                    </ul>
+                  </drop-down>
+                </div>
+              </a>
+            </li>
+
+            <!-- <md-list-item href="#/profile">
               <i class="material-icons">person</i>
               <p class="hidden-lg hidden-md">Profile</p>
-            </md-list-item>
+            </md-list-item> -->
           </md-list>
         </div>
       </div>
@@ -93,6 +131,10 @@ export default {
   methods: {
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+    },
+    handleLogout(e) {
+      e.preventDefault();
+      this.$store.commit("logout");
     },
   },
 };

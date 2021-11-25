@@ -2,10 +2,10 @@ export default {
   created() {
     this.$store.commit('authenticate')
   },
-  mounted() { },
+  mounted() {},
   computed: {
     token() {
-      return this.$store.state.user.token;
+      return this.$store.state.auth.token;
     }
   }
 }

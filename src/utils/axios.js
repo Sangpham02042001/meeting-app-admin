@@ -7,7 +7,7 @@ const axiosAuth = axios.create({
 })
 
 axiosAuth.interceptors.request.use(config => {
-  let token = JSON.parse(localStorage.getItem('user')).token
+  let token = localStorage.token
   config.headers.Authorization = `Bearer ${token}`
   return config;
 }, (error) => {
@@ -17,9 +17,10 @@ axiosAuth.interceptors.request.use(config => {
 axiosAuth.interceptors.response.use(response => {
   return response;
 }, (error) => {
+  console.log(error.response)
   if (error.response.data.error === "Unauthorized" && error.response.status === 401) {
-    localStorage.removeItem('user');
-    location.reload();
+    // localStorage.removeItem('token');
+    // location.reload();
   }
   return Promise.reject(error);
 })

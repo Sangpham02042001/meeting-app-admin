@@ -6,7 +6,6 @@ import Teams from "@/pages/Teams.vue";
 import Meeting from "@/pages/Meeting.vue";
 import Support from "@/pages/Support.vue";
 import Team from '../components/Team/Team.vue'
-
 const routes = [
   {
     path: "/",
@@ -47,9 +46,9 @@ const routes = [
         path: "support",
         name: "Support",
         component: Support,
-      },
+      }
     ],
-  },
+  }
 ];
 
 export default routes;
