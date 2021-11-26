@@ -29,7 +29,7 @@ const user = {
   actions: {
     async login(context, { username, password }) {
       try {
-        const session = await axiosInstance.post('/admin/api/signin', { email: username, password });
+        const session = await axiosInstance.post('/api/signin', { email: username, password });
         console.log(session);
         const token = session.data.token;
         context.commit('setToken', token);

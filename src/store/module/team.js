@@ -39,6 +39,12 @@ const team = {
       }
       state.loading = false
     },
+    delete(state, { teamId }) {
+      let idx = state.teams.findIndex(t => t.id == teamId)
+      if (idx >= 0) {
+        state.teams.splice(idx, 1)
+      }
+    },
     setLoading(state) {
       state.loading = true
     }
@@ -79,7 +85,24 @@ const team = {
       } catch (error) {
         console.log(error)
       }
-    }
+    },
+    async deleteTeam(context, { teamId }) {
+      try {
+        let response = await services.deleteTeam(teamId)
+        if (response.status == 200) {
+          context.commit('delete', { teamId })
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // async addTeam(context, {newTeam}) {
+    //   try {
+
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // }
   }
 }
 export default team;
