@@ -96,13 +96,18 @@ const team = {
         console.log(error)
       }
     },
-    // async addTeam(context, {newTeam}) {
-    //   try {
-
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // }
+    async addTeam(context, { newTeam }) {
+      try {
+        let response = await services.addTeam(newTeam)
+        if (response.status == 201) {
+          response = await services.getAllTeams()
+          let { teams } = response.data
+          context.commit('getAllTeams', { teams })
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 }
 export default team;

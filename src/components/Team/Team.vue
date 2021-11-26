@@ -84,7 +84,7 @@
       </div> 
     </div>
     <div> 
-      <h4><strong>Current meetings: </strong></h4>
+      <h4><strong>Recent meetings: </strong></h4>
       <p v-if="team.meetings.length === 0">
         No meeting in this teams
       </p>

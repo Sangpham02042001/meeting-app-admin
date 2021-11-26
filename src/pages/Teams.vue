@@ -36,6 +36,7 @@
         <md-table-head>Name</md-table-head>
         <md-table-head>Host</md-table-head>
         <md-table-head>Team type</md-table-head>
+        <md-table-head>Team code</md-table-head>
         <md-table-head>Created at</md-table-head>
         <md-table-head>Members</md-table-head>
         <md-table-head>Meetings</md-table-head>
@@ -51,6 +52,7 @@
         </md-table-cell>
         <md-table-cell>{{team.host.firstName}} {{team.host.lastName}}</md-table-cell>
         <md-table-cell>{{team.teamType}} team</md-table-cell>
+        <md-table-cell>{{team.teamCode}}</md-table-cell>
         <md-table-cell>{{getTime(team.createdAt)}}</md-table-cell>
         <md-table-cell>{{team.members.length}}</md-table-cell>
         <md-table-cell>{{team.meetings.length}}</md-table-cell>
@@ -87,7 +89,7 @@
         <md-checkbox v-model="newTeam.isPublicTeam">Public Team</md-checkbox>
         <md-field>
           <label>Team Coverphoto</label>
-          <md-file v-model="newTeam.coverPhoto" accept="image/*" />
+          <md-file v-model="newTeam.image" @change="onImageChange" accept="image/*" />
         </md-field>
       </md-dialog-content>
       <md-dialog-actions>
@@ -145,7 +147,8 @@ export default {
         teamName: '',
         isPublicTeam: true,
         coverPhoto: null,
-        hostId: null
+        hostId: null,
+        image: ''
       }
     }
   },
@@ -181,18 +184,36 @@ export default {
     reloadTeams() {
       this.$store.dispatch('getAllTeams')
     },
-    cancelAddteam() {
+    cancelAddTeam() {
       this.addDialogShow = false
       this.newTeam = {
         teamName: '',
         isPublicTeam: true,
         coverPhoto: null,
+        image: '',
         hostId: null
       }
     },
     addTeam() {
-      console.log('fdfas')
-      // this.$store.dispatch('addTeam', {newTeam: this.newTeam})
+      this.$store.dispatch('addTeam', {newTeam: this.newTeam})
+    },
+    onImageChange(e) {
+      const file = e.target.files[0];
+      this.newTeam.coverPhoto = file;
+    }
+  },
+  watch: {
+    'teams.length'(newVal) {
+      if (newVal && this.newTeam.teamName) {
+        this.newTeam = {
+          teamName: '',
+          isPublicTeam: true,
+          coverPhoto: null,
+          image: '',
+          hostId: null
+        }
+        this.addDialogShow = false
+      }
     }
   },
   components: {
