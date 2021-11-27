@@ -7,6 +7,8 @@ import Meeting from "@/pages/Meeting.vue";
 import Support from "@/pages/Support.vue";
 import Team from '../components/Team/Team.vue'
 import TeamMessages from '../components/Team/TeamMessages.vue'
+import TeamFiles from '../components/Team/TeamFiles.vue'
+import TeamImages from '../components/Team/TeamImages.vue'
 
 const routes = [
   {
@@ -38,6 +40,16 @@ const routes = [
         path: '/teams/:teamId/messages',
         name: 'TeamMessages',
         component: TeamMessages
+      },
+      {
+        path: '/teams/:teamId/images',
+        name: 'TeamImages',
+        component: TeamImages
+      },
+      {
+        path: '/teams/:teamId/files',
+        name: 'TeamFiless',
+        component: TeamFiles
       },
       {
         path: '/teams/:teamId',

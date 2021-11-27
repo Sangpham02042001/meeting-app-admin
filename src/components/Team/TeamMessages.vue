@@ -24,6 +24,7 @@
           :message="mess"></message> 
       </div>
     </div>
+    <h4 v-else>No messages in this team</h4>
   </div>
 </template>
 

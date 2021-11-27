@@ -59,6 +59,12 @@ const teamServices = {
   },
   getTeamMessages: ({ teamId }) => {
     return axiosAuth.get(`/api/teams/${teamId}/messages`)
+  },
+  getTeamSharedMedia: ({ teamId }) => {
+    return axiosAuth.get(`/api/teams/${teamId}/images`)
+  },
+  getTeamSharedFiles: ({ teamId }) => {
+    return axiosAuth.get(`/api/teams/${teamId}/files`)
   }
 }
 

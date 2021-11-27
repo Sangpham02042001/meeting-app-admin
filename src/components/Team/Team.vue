@@ -36,6 +36,16 @@
           View messages in this team
         </router-link> 
       </h5>
+      <h5>
+        <router-link :to="'/teams/' + team.id + '/files'">
+          View shared files in this team
+        </router-link> 
+      </h5>
+      <h5>
+        <router-link :to="'/teams/' + team.id + '/images'">
+          View shared images in this team
+        </router-link> 
+      </h5>
     </div>
     <div> 
       <h4><strong>Members: </strong></h4>

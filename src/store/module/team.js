@@ -132,6 +132,14 @@ const team = {
         response = await services.getTeamMessages({ teamId })
         let { messages } = response.data
         team.messages = messages
+        //get shared files
+        response = await services.getTeamSharedFiles({ teamId })
+        let { files } = response.data
+        team.files = files
+        //get shared images 
+        response = await services.getTeamSharedMedia({ teamId })
+        let { images } = response.data
+        team.images = images
         context.commit('setTeam', { team })
       } catch (error) {
         console.log(error)
