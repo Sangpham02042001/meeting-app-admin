@@ -56,6 +56,9 @@ const teamServices = {
     return axiosAuth.put(`/api/teams/${teamId}/remove-requests`, {
       users: [userId]
     })
+  },
+  getTeamMessages: ({ teamId }) => {
+    return axiosAuth.get(`/api/teams/${teamId}/messages`)
   }
 }
 

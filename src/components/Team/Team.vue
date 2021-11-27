@@ -10,7 +10,7 @@
           <strong>Created by: </strong> 
           <span> 
             <md-avatar style="margin: 0 10px;">
-              <img :src="baseURL + '/api/user/avatar/' + team.hostId" alt="Avatar">
+              <img :src="baseURL + '/api/user/avatar/' + team.hostId" alt="Avatar" />
             </md-avatar>
             <strong>{{team.host.firstName}} {{team.host.lastName}}</strong>
           </span>
@@ -29,6 +29,13 @@
         backgroundImage: 'url(' + baseURL + '/api/team/coverphoto/' + team.id + ')'
       }"> 
       </div>
+    </div>
+    <div>
+      <h5>
+        <router-link :to="'/teams/' + team.id + '/messages'">
+          View messages in this team
+        </router-link> 
+      </h5>
     </div>
     <div> 
       <h4><strong>Members: </strong></h4>

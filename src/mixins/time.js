@@ -1,7 +1,8 @@
-import { getTime } from '../utils'
+import { getTime, messageTimeDiff } from '../utils'
 
 export default {
   methods: {
-    getTime
+    getTime,
+    messageTimeDiff
   }
 }

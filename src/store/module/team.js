@@ -6,7 +6,12 @@ const team = {
     paginationNumber: 10,
     paginationOffset: 0,
     isLoaded: false,
-    team: {},
+    team: {
+      members: [],
+      requestUsers: [],
+      invitedUsers: [],
+      messages: []
+    },
     isTeamLoaded: false,
     error: null,
     loading: false
@@ -14,6 +19,9 @@ const team = {
   getters: {
     getTeamById: (state) => teamId => {
       return state.teams.find(t => t.id === teamId)
+    },
+    getMessages(state) {
+      return state.team.messages
     }
   },
   mutations: {
@@ -79,6 +87,11 @@ const team = {
         }
       }
     },
+    setMessages(state, { teamId, messages }) {
+      if (teamId == state.team.id) {
+        state.team.messages = messages
+      }
+    },
     setLoading(state) {
       state.loading = true
     }
@@ -115,6 +128,10 @@ const team = {
         response = await services.getTeamMeeting(teamId)
         let { meetings } = response.data
         team.meetings = meetings
+        //get messages
+        response = await services.getTeamMessages({ teamId })
+        let { messages } = response.data
+        team.messages = messages
         context.commit('setTeam', { team })
       } catch (error) {
         console.log(error)
@@ -170,6 +187,17 @@ const team = {
       try {
         await services.confirmRequest({ userId, teamId })
         context.commit('confirmRequest', { userId, teamId })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getTeamMessages(context, { teamId }) {
+      try {
+        let response = await services.getTeamMessages({ teamId })
+        if (response.status == 200) {
+          let { messages } = response.data
+          context.commit('setMessages', { teamId, messages })
+        }
       } catch (error) {
         console.log(error)
       }
