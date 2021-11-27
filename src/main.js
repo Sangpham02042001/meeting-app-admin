@@ -13,6 +13,7 @@ import Notifications from "./components/NotificationPlugin";
 import MaterialDashboard from "./material-dashboard";
 
 import Chartist from "chartist";
+import { baseURL } from "./utils";
 
 // configure router
 const router = new VueRouter({
@@ -27,6 +28,13 @@ Vue.use(MaterialDashboard);
 Vue.use(GlobalComponents);
 Vue.use(GlobalDirectives);
 Vue.use(Notifications);
+Vue.mixin({
+  computed: {
+    baseURL() {
+      return baseURL
+    }
+  }
+})
 
 /* eslint-disable no-new */
 new Vue({

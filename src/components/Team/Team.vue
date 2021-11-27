@@ -3,34 +3,47 @@
     <router-link to="/teams">
       <md-icon>arrow_back_ios</md-icon> Teams
     </router-link>
-    <h3><strong>Team:</strong> {{team.name}}</h3>
-    <div> 
-      <strong>Created by: </strong> 
-      <span> 
-        <md-avatar style="margin: 0 10px;">
-          <img :src="baseURL + '/api/user/avatar/' + team.hostId" alt="Avatar">
-        </md-avatar>
-        <strong>{{team.host.firstName}} {{team.host.lastName}}</strong>
-      </span>
-    </div>
-    <div> 
-      <strong>Created on: </strong> {{getTime(team.createdAt)}}
-    </div>
-    <div> 
-      <strong>Last update on: </strong> {{getTime(team.updatedAt)}}
+    <div class="team-intro">
+      <div> 
+        <h3><strong>Team:</strong> {{team.name}}</h3>
+        <div> 
+          <strong>Created by: </strong> 
+          <span> 
+            <md-avatar style="margin: 0 10px;">
+              <img :src="baseURL + '/api/user/avatar/' + team.hostId" alt="Avatar">
+            </md-avatar>
+            <strong>{{team.host.firstName}} {{team.host.lastName}}</strong>
+          </span>
+        </div>
+        <div> 
+          <strong>Created on: </strong> {{getTime(team.createdAt)}}
+        </div>
+        <div> 
+          <strong>Last update on: </strong> {{getTime(team.updatedAt)}}
+        </div>
+      </div>
+      <!-- <md-avatar>
+        <img :src="baseURL + '/api/team/coverphoto/' + team.id" alt="Avatar">
+      </md-avatar> -->
+      <div class="team-avatar" :style="{
+        backgroundImage: 'url(' + baseURL + '/api/team/coverphoto/' + team.id + ')'
+      }"> 
+      </div>
     </div>
     <div> 
       <h4><strong>Members: </strong></h4>
     </div>
     <div class="members-grid">
       <div v-for="member in team.members" :key="member.id">
-        <md-menu>
+        <md-menu v-if="member.id !== team.hostId">
           <md-icon md-menu-trigger>more_horiz</md-icon>
           <md-menu-content>
-            <md-menu-item>Remove</md-menu-item>
+            <md-menu-item style="cursor: pointer;" @click="handleRemoveMember(member.id)">Remove</md-menu-item>
           </md-menu-content>
         </md-menu>
-        <span> 
+        <span :style="{
+          marginLeft: member.id === team.hostId ? '24px' : 0
+        }"> 
           <md-avatar style="margin: 0 10px;">
             <img :src="baseURL + '/api/user/avatar/' + member.id" alt="Avatar">
           </md-avatar>
@@ -49,8 +62,8 @@
         <md-menu>
           <md-icon md-menu-trigger>more_horiz</md-icon>
           <md-menu-content>
-            <md-menu-item>Confirm</md-menu-item>
-            <md-menu-item>Remove</md-menu-item>
+            <md-menu-item style="cursor: pointer;" @click="handleConfirmRequest(member.id)">Confirm</md-menu-item>
+            <md-menu-item style="cursor: pointer;" @click="handleRemoveRequest(member.id)">Remove</md-menu-item>
           </md-menu-content>
         </md-menu>
         <span> 
@@ -72,7 +85,7 @@
         <md-menu>
           <md-icon md-menu-trigger>more_horiz</md-icon>
           <md-menu-content>
-            <md-menu-item>Cancel</md-menu-item>
+            <md-menu-item style="cursor: pointer;" @click="handleRemoveInvitation(member.id)">Cancel</md-menu-item>
           </md-menu-content>
         </md-menu>
         <span> 
@@ -120,6 +133,38 @@
         </md-card>
       </div>
     </div>
+
+    <md-dialog-confirm
+      :md-active.sync="showRemoveMemberDialog"
+      :md-title="'Delete this member from team' + team.name"
+      md-confirm-text="Agree"
+      md-cancel-text="Disagree"
+      @md-cancel="onCancelRemoveMember"
+      @md-confirm="onConfirmRemoveMember" />
+
+    <md-dialog-confirm
+      :md-active.sync="showRemoveInvitationDialog"
+      md-title="Cancel invite this user ?"
+      md-confirm-text="Agree"
+      md-cancel-text="Disagree"
+      @md-cancel="onCancelRemoveInvitation"
+      @md-confirm="onConfirmRemoveInvitation" />
+
+    <md-dialog-confirm
+      :md-active.sync="showRemoveRequestDialog"
+      md-title="Remove this user's request ?"
+      md-confirm-text="Agree"
+      md-cancel-text="Disagree"
+      @md-cancel="onCancelRemoveRequest"
+      @md-confirm="onConfirmRemoveRequest" />
+
+    <md-dialog-confirm
+      :md-active.sync="showConfirmRequestDialog"
+      md-title="Confirm this user's request ?"
+      md-confirm-text="Agree"
+      md-cancel-text="Disagree"
+      @md-cancel="onCancelConfirmRequest"
+      @md-confirm="onConfirmRequest" />
   </div>
 </template>
 
@@ -130,6 +175,15 @@ import {baseURL} from '../../utils'
 
 export default {
   name: 'Team',
+  data() {
+    return {
+      selectedUserId: null,
+      showRemoveMemberDialog: false,
+      showRemoveInvitationDialog: false,
+      showRemoveRequestDialog: false,
+      showConfirmRequestDialog: false
+    }
+  },
   computed: {
      ...mapState({
       isLoaded: (state) => state.team.isLoaded,
@@ -153,8 +207,80 @@ export default {
     getMeetingMemberName(memberId) {
       if (this.team) {
         let member = this.team.members.find(m => m.id == memberId)
+        if (!member) {
+          return ''
+        }
         return member.userName
       }
+    },
+    //remove member
+    handleRemoveMember(userId) {
+      this.selectedUserId = userId
+      this.showRemoveMemberDialog = true
+    },
+    onCancelRemoveMember() {
+      this.selectedUserId = null
+      this.showRemoveMemberDialog = false
+    },
+    onConfirmRemoveMember() {
+      this.$store.dispatch('removeMembers', {
+        teamId: this.team.id,
+        userId: this.selectedUserId
+      })
+    },
+
+    //cancel invitation
+    handleRemoveInvitation(userId) {
+      this.selectedUserId = userId
+      this.showRemoveInvitationDialog = true
+    },
+    onCancelRemoveInvitation() {
+      this.selectedUserId = null
+      this.showRemoveInvitationDialog = false
+    },
+    onConfirmRemoveInvitation() {
+      this.$store.dispatch('cancelInvitation', {
+        teamId: this.team.id,
+        userId: this.selectedUserId
+      })
+      this.selectedUserId = null
+      this.showRemoveInvitationDialog = false
+    },
+
+    //remove request
+    handleRemoveRequest(userId) {
+      this.selectedUserId = userId
+      this.showRemoveRequestDialog = true
+    },
+    onCancelRemoveRequest() {
+      this.selectedUserId = null
+      this.showRemoveRequestDialog = false
+    },
+    onConfirmRemoveRequest() {
+      this.$store.dispatch("removeRequest", {
+        teamId: this.team.id,
+        userId: this.selectedUserId
+      })
+      this.selectedUserId = null
+      this.showRemoveRequestDialog = false
+    },
+
+    //confirm request
+    handleConfirmRequest(userId) {
+      this.selectedUserId = userId
+      this.showConfirmRequestDialog = true
+    },
+    onCancelConfirmRequest() {
+      this.selectedUserId = null
+      this.showConfirmRequestDialog = false
+    },
+    onConfirmRequest() {
+      this.$store.dispatch("confirmRequest", {
+        teamId: this.team.id,
+        userId: this.selectedUserId
+      })
+      this.selectedUserId = null
+      this.showConfirmRequestDialog = false
     }
   },
   watch: {
@@ -165,10 +291,13 @@ export default {
         }
       }
     },
-    // $route() {
-    //   console.log('route change')
-    //   this.$store.dispatch('getTeamInfo', {teamId: Number(this.$route.params.teamId)})
-    // }
+    'team.members'(newVal) {
+      if (newVal && this.selectedUserId && this.showRemoveMemberDialog) {
+        this.selectedUserId = null
+        this.showRemoveMemberDialog = false
+        this.$store.dispatch('getTeamInfo', {teamId: Number(this.$route.params.teamId)})
+      }
+    }
   },
   mixins: [timeMixin]
 }
@@ -191,6 +320,14 @@ export default {
     }
   }
 }
+
+.team-intro {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 40px;
+  align-items: center;
+}
+
 .members-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -212,5 +349,13 @@ p {
 }
 .md-menu i {
   cursor: pointer;
+}
+.team-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 </style>

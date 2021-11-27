@@ -45,6 +45,40 @@ const team = {
         state.teams.splice(idx, 1)
       }
     },
+    removeMembers(state, { teamId, userId }) {
+      if (teamId == state.team.id) {
+        let idx = state.team.members.findIndex(m => m.id == userId)
+        if (idx >= 0) {
+          state.team.members.splice(idx, 1)
+        }
+      }
+    },
+    removeInvitation(state, { teamId, userId }) {
+      if (teamId == state.team.id) {
+        let idx = state.team.invitedUsers.findIndex(user => user.id == userId)
+        if (idx >= 0) {
+          state.team.invitedUsers.splice(idx, 1)
+        }
+      }
+    },
+    removeRequest(state, { teamId, userId }) {
+      if (teamId == state.team.id) {
+        let idx = state.team.requestUsers.findIndex(user => user.id === userId)
+        if (idx >= 0) {
+          state.team.requestUsers.splice(idx, 1)
+        }
+      }
+    },
+    confirmRequest(state, { teamId, userId }) {
+      if (teamId == state.team.id) {
+        let idx = state.team.requestUsers.findIndex(user => user.id === userId)
+        if (idx >= 0) {
+          let user = state.team.requestUsers[idx]
+          state.team.requestUsers.splice(idx, 1)
+          state.team.members.push(user)
+        }
+      }
+    },
     setLoading(state) {
       state.loading = true
     }
@@ -104,6 +138,38 @@ const team = {
           let { teams } = response.data
           context.commit('getAllTeams', { teams })
         }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async removeMembers(context, { userId, teamId }) {
+      try {
+        await services.removeMembers({ userId, teamId })
+        context.commit('removeMembers', { teamId, userId })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async cancelInvitation(context, { userId, teamId }) {
+      try {
+        await services.removeInvitation({ userId, teamId })
+        context.commit('removeInvitation', { teamId, userId })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async removeRequest(context, { userId, teamId }) {
+      try {
+        await services.removeRequest({ teamId, userId })
+        context.commit('removeRequest', { teamId, userId })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async confirmRequest(context, { userId, teamId }) {
+      try {
+        await services.confirmRequest({ userId, teamId })
+        context.commit('confirmRequest', { userId, teamId })
       } catch (error) {
         console.log(error)
       }
