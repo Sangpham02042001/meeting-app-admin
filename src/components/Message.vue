@@ -33,9 +33,8 @@
         :style="{
           marginLeft: !hasAvatar ? '50px' : '10px'
         }">
-        <div v-for="(file, idx) in message.files" :key="idx" className="message-file" 
-          @click="handleFileDownload(file.id)"
-          style="padding: 10px; background-color: #FFF;cursor: pointer; border-radius: 10px;">
+        <div v-for="(file, idx) in message.files" :key="idx" class="message-file" 
+          @click="handleFileDownload(file.id)">
           <md-icon>description</md-icon>
           {{file.name}}
         </div>
