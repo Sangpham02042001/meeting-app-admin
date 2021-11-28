@@ -1,7 +1,7 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 import Dashboard from "@/pages/Dashboard.vue";
 import Profile from "@/pages/Profile.vue";
-import User from "@/pages/User.vue";
+import Users from "@/pages/Users.vue";
 import Teams from "@/pages/Teams.vue";
 import Meeting from "@/pages/Meeting.vue";
 import Support from "@/pages/Support.vue";
@@ -29,7 +29,7 @@ const routes = [
       {
         path: "users",
         name: "Users",
-        component: User
+        component: Users
       },
       {
         path: "teams",
