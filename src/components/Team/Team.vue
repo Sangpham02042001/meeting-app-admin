@@ -34,9 +34,6 @@
           <strong>Last update on: </strong> {{getTime(team.updatedAt)}}
         </div>
       </div>
-      <!-- <md-avatar>
-        <img :src="baseURL + '/api/team/coverphoto/' + team.id" alt="Avatar">
-      </md-avatar> -->
       <div class="team-avatar" :key="team.coverPhoto" :style="{
         backgroundImage: 'url(' + baseURL + '/api/team/coverphoto/' + team.id + '?key=' + team.coverPhoto + ')'
       }"> 
@@ -135,7 +132,9 @@
           <md-card-header-text>
             <div class="md-title" style="word-wrap: break-all">
               <strong>{{idx + 1}}.</strong>
-              Meeting created by {{getMeetingMemberName(meeting.hostId)}}
+              <router-link :to="'/meetings/' + meeting.id">
+                Meeting created by {{getMeetingMemberName(meeting.hostId)}}
+              </router-link>
             </div>
           </md-card-header-text>
           <md-card-expand style="margin: 5px">
@@ -219,7 +218,6 @@
 <script>
 import {mapState} from 'vuex'
 import timeMixin from '../../mixins/time'
-import {baseURL} from '../../utils'
 
 export default {
   name: 'Team',
@@ -244,9 +242,6 @@ export default {
       team: (state) => state.team.team,
       teams: (state) => state.team.teams
     }),
-    baseURL() {
-      return baseURL
-    },
   },
   mounted() {
     if (!this.isLoaded) {

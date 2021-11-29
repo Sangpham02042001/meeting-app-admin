@@ -145,7 +145,11 @@ export default {
       window.open(`${this.baseURL}/api/messages/files/${this.message.id}/${fileId}`)
     },
     handleDelete() {
-      this.$store.dispatch('deleteMessage', {messageId: this.message.id})
+      if (this.message.teamId) {
+        this.$store.dispatch('deleteTeamMessage', {messageId: this.message.id})
+      } else if (this.message.meetingId) {
+        this.$store.dispatch('deleteMeetingMessage', {messageId: this.message.id})
+      }
     }
   },
   mixins: [time]

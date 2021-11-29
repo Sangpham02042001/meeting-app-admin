@@ -243,7 +243,7 @@ const team = {
         console.log(error)
       }
     },
-    async deleteMessage(context, { messageId }) {
+    async deleteTeamMessage(context, { messageId }) {
       try {
         let response = await messageServices.delete({ messageId })
         if (response.status == 200) {

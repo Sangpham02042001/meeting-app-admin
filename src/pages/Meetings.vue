@@ -1,5 +1,12 @@
 <template>
   <div class="meetings-page">
+    <div class="search-team-container">
+      <search-by-name
+        :options="cMeetingHostName"
+        @handleChange="searchByHostName"
+        title="Host Name"
+      />
+    </div>
     <div class="pagination-container"> 
       <md-button
         class="md-dense md-icon-button"
@@ -30,7 +37,11 @@
         <md-table-head>Actions</md-table-head>
       </md-table-row>
       <md-table-row v-for="meeting in filteredMeetings" :key="meeting.id">
-        <md-table-cell md-numeric>{{meeting.id}}</md-table-cell>
+        <md-table-cell md-numeric>
+          <router-link :to="'/meetings/' + meeting.id">
+            {{meeting.id}}
+          </router-link>
+        </md-table-cell>
         <md-table-cell>{{meeting.host.firstName}} {{meeting.host.lastName}}</md-table-cell>
         <md-table-cell>{{meeting.active ? 'Active': 'Ended'}}</md-table-cell>
         <md-table-cell>{{getTime(meeting.createdAt)}}</md-table-cell>
@@ -42,19 +53,29 @@
               edit
             </span>
           </router-link>
-          <span class="material-icons">
+          <span class="material-icons" @click="showDeleteDialog(meeting.id)">
             <md-tooltip md-direction="top">Delete</md-tooltip>
             delete
           </span>
         </md-table-cell>
       </md-table-row>
     </md-table>
+
+    <md-dialog-confirm
+      :md-active.sync="deleteDialogShow"
+      md-title="Delete this meeting?"
+      md-confirm-text="Agree"
+      md-cancel-text="Disagree"
+      @md-cancel="onCancelDelete"
+      @md-confirm="onConfirmDelete"
+    />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import timeMixin from '../mixins/time'
+import { SearchByName } from "@/components";
 
 export default {
   computed: {
@@ -72,7 +93,27 @@ export default {
       return this.paginationOffset <= 0
     },
     filteredMeetings() {
-      return [...this.meetings].splice(this.paginationOffset, this.paginationNumber)
+      if (!this.searchHostName) {
+        return [...this.meetings].splice(this.paginationOffset, this.paginationNumber)
+      } else {
+        return this.meetings.filter((meeting) =>
+          (meeting.host.firstName + ' ' + meeting.host.lastName).toLowerCase().includes(this.searchHostName.toLowerCase()))
+      }
+    },
+    cMeetingHostName() {
+      if (!this.meetings.length) {
+        return []
+      } else {
+        let res = []
+        let name = ''
+        for (const meeting of this.meetings) {
+          name = meeting.host.firstName + ' ' + meeting.host.lastName
+          if (res.indexOf(name) < 0) {
+            res.push(name)
+          }
+        }
+        return res;
+      }
     }
   },
   mounted() {
@@ -90,8 +131,35 @@ export default {
     reloadMeetings() {
       this.$store.dispatch('getAllMeetings')
     },
+    searchByHostName({ name }) {
+      this.searchHostName = name;
+    },
+    showDeleteDialog(meetingId) {
+      this.selectedMeeting = meetingId;
+      this.deleteDialogShow = true;
+    },
+    onCancelDelete() {
+      this.selectedMeeting = 0;
+      this.deleteDialogShow = false;
+    },
+    onConfirmDelete() {
+      console.log(this.selectedMeeting);
+      this.$store.dispatch("deleteMeeting", { meetingId: this.selectedMeeting });
+      this.selectedMeeting = 0;
+      this.deleteDialogShow = false;
+    },
   },
-  mixins: [timeMixin]
+  data() {
+    return {
+      searchHostName: '',
+      selectedMeeting: null,
+      deleteDialogShow: false
+    }
+  },
+  mixins: [timeMixin],
+  components: {
+    "search-by-name": SearchByName,
+  },
 };
 </script>
 
@@ -106,5 +174,12 @@ export default {
   .md-button .md-ripple {
     padding: 8px !important;
   }
+}
+.search-team-container {
+  width: 50%;
+  margin: auto;
+}
+span {
+  cursor: pointer;
 }
 </style>
