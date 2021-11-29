@@ -12,7 +12,7 @@
       <message :message="team.messages[0]"
         :key="team.messages[0].id" :user-name="getMemberName(team.messages[0].userId)"
         :has-avatar="true"></message>
-      <div v-for="(mess, idx) in team.messages.slice(1, team.messages.length - 1)" :key="mess.id"> 
+      <div v-for="(mess, idx) in team.messages.slice(1, team.messages.length)" :key="mess.id"> 
         <div style="text-align: center;" v-if="messageTimeDiff(team.messages[idx].createdAt, team.messages[idx + 1].createdAt)">
           <span>
             {{messageTimeDiff(team.messages[idx].createdAt, team.messages[idx + 1].createdAt)}}

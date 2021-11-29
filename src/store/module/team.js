@@ -1,3 +1,4 @@
+import messageServices from '../../services/message'
 import services from '../../services/team'
 
 const team = {
@@ -90,6 +91,14 @@ const team = {
     setMessages(state, { teamId, messages }) {
       if (teamId == state.team.id) {
         state.team.messages = messages
+      }
+    },
+    deleteMessage(state, { messageId }) {
+      let idx = state.team.messages.findIndex(mess => mess.id == messageId)
+      if (idx >= 0) {
+        state.team.messages.splice(idx, 1)
+        state.team.files = state.team.files.filter(file => file.messageId != messageId)
+        state.team.images = state.team.images.filter(img => img.messageId != messageId)
       }
     },
     editTeam(state, { team }) {
@@ -230,6 +239,16 @@ const team = {
         let response = await services.editTeam({ teamName, coverPhoto, isPublicTeam, teamId })
         let { team } = response.data
         context.commit('editTeam', { team })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async deleteMessage(context, { messageId }) {
+      try {
+        let response = await messageServices.delete({ messageId })
+        if (response.status == 200) {
+          context.commit('deleteMessage', { messageId })
+        }
       } catch (error) {
         console.log(error)
       }

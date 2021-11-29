@@ -3,13 +3,19 @@
     <router-link to="/teams">
       <md-icon>arrow_back_ios</md-icon> Teams
     </router-link>
+    <div style="display: flex; align-items: center;"> 
+      <span class="team-edit-button" @click="showEditTeamDialog = true">
+        <md-icon>edit</md-icon>
+      </span>
+      <md-button class="md-dense md-icon-button" @click="reloadTeam">
+        <md-tooltip md-direction="top">Reload</md-tooltip>
+        <md-icon>autorenew</md-icon>
+      </md-button>
+    </div>
     <div class="team-intro">
-      <div> 
-        <h3 style="display: flex; align-items: center;">
+      <div>
+        <h3 style="margin-top: 0;">
           <strong>Team:</strong> {{team.name}}
-          <span class="team-edit-button" @click="showEditTeamDialog = true">
-            <md-icon>edit</md-icon>
-          </span>
         </h3>
         <div><strong>Team type:</strong> {{team.teamType}} </div>
         <div> 
@@ -350,6 +356,9 @@ export default {
         const file = e.target.files[0];
         this.coverPhoto = file;
       }
+    },
+    reloadTeam() {
+      this.$store.dispatch('getTeamInfo', {teamId: Number(this.$route.params.teamId)})
     }
   },
   watch: {

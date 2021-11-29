@@ -1,51 +1,65 @@
 <template>
   <div> 
     <div v-if="hasAvatar" class="user-avatar-container"> 
-      <md-avatar v-if="hasAvatar">
+      <div class="message-user-name">{{userName}}</div>
+      <!-- <md-avatar v-if="hasAvatar">
         <img :src="baseURL + '/api/user/avatar/' + message.userId" alt="Avatar" />
-      </md-avatar>
-      <span class="message-user-name">{{userName}}</span>
+      </md-avatar> -->
     </div>
     <div class="message-container" style="display: flex;">
-      <div v-if="message.photos && message.photos.length" :style="{
-        marginLeft: '30px'
-      }">
-        <div v-if="message.photos.length > 1" class="message-photo-list">
-          <img v-for="(photo, idx) in message.photos" :key="idx" 
-            @click="handlePreviewImg(message.id, photo.id)"
-            :src="baseURL + '/api/messages/' + message.id + '/' + photo.id"
-            :class="hasAvatar ? 'photo-last-message' : ''"
-            :style="{
-              width: getImageSize(message.photos.length).itemWidth,
-              height: getImageSize(message.photos.length).height,
-            }" /> 
-        </div>
-        <div v-else class="message-photo-list">
-          <img v-for="(photo, idx) in message.photos" :key="idx" 
-            @click="handlePreviewImg(message.id, photo.id)"
-            :src="baseURL + '/api/messages/' + message.id + '/' + photo.id"
-            :class="hasAvatar ? 'photo-last-message' : ''"
-            :style="{
-              maxWidth: getImageSize(message.photos.length).itemWidth,
-              maxHeight: getImageSize(message.photos.length).height,
-            }" /> 
-        </div>
-      </div>
-      <div v-if="message.files && message.files.length" class="message-file-list" 
-        :style="{
-          marginLeft: '30px'
+       <md-avatar v-if="hasAvatar">
+        <img :src="baseURL + '/api/user/avatar/' + message.userId" alt="Avatar" />
+      </md-avatar>
+      <div> 
+        <div v-if="message.photos && message.photos.length" :style="{
+          marginLeft: hasAvatar ? '10px' : '50px'
         }">
-        <div v-for="(file, idx) in message.files" :key="idx" class="message-file" 
-          @click="handleFileDownload(file.id)">
-          <md-icon>description</md-icon>
-          {{file.name}}
+          <div v-if="message.photos.length > 1" class="message-photo-list">
+            <img v-for="(photo, idx) in message.photos" :key="idx" 
+              @click="handlePreviewImg(message.id, photo.id)"
+              :src="baseURL + '/api/messages/' + message.id + '/' + photo.id"
+              :class="hasAvatar ? 'photo-last-message' : ''"
+              :style="{
+                width: getImageSize(message.photos.length).itemWidth,
+                height: getImageSize(message.photos.length).height,
+              }" /> 
+          </div>
+          <div v-else class="message-photo-list">
+            <img v-for="(photo, idx) in message.photos" :key="idx" 
+              @click="handlePreviewImg(message.id, photo.id)"
+              :src="baseURL + '/api/messages/' + message.id + '/' + photo.id"
+              :class="hasAvatar ? 'photo-last-message' : ''"
+              :style="{
+                maxWidth: getImageSize(message.photos.length).itemWidth,
+                maxHeight: getImageSize(message.photos.length).height,
+              }" /> 
+          </div>
         </div>
+        <div v-if="message.files && message.files.length" class="message-file-list" 
+          :style="{
+            marginLeft: hasAvatar ? '10px' : '50px'
+          }">
+          <div v-for="(file, idx) in message.files" :key="idx" class="message-file" 
+            @click="handleFileDownload(file.id)">
+            <md-icon>description</md-icon>
+            {{file.name}}
+          </div>
+        </div>
+        <p v-if="message.content" :style="{
+          marginLeft: hasAvatar ? '10px' : '50px'
+        }">
+          {{message.content}}
+        </p>
+        <md-menu md-direction="bottom-start">
+          <span class="material-icons menu-trigger-icon" md-menu-trigger>
+            more_horiz
+          </span>
+
+          <md-menu-content>
+            <md-menu-item style="cursor: pointer;" @click="handleDelete">Remove</md-menu-item>
+          </md-menu-content>
+        </md-menu>
       </div>
-      <p v-if="message.content" :style="{
-        marginLeft: '30px'
-      }">
-        {{message.content}}
-      </p>
       <md-tooltip md-direction="left">{{getTime(message.createdAt)}}</md-tooltip>
     </div>
 
@@ -129,6 +143,9 @@ export default {
     },
     handleFileDownload(fileId) {
       window.open(`${this.baseURL}/api/messages/files/${this.message.id}/${fileId}`)
+    },
+    handleDelete() {
+      this.$store.dispatch('deleteMessage', {messageId: this.message.id})
     }
   },
   mixins: [time]
@@ -144,6 +161,10 @@ export default {
   justify-content: flex-start;
   align-items: flex-start;
   margin-bottom: 5px;
+}
+.message-container > div {
+  display: flex;
+  align-items: center;
 }
 .message-container p {
   margin-bottom: 0;
@@ -202,5 +223,14 @@ export default {
 
 .md-dialog-container {
   box-shadow: none !important;
+}
+
+.menu-trigger-icon {
+  cursor: pointer;
+  color: transparent;
+}
+
+.message-container:hover .menu-trigger-icon {
+  color: gray;
 }
 </style>
