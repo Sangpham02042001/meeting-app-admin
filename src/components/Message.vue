@@ -1,12 +1,14 @@
 <template>
   <div> 
-    <span class="message-user-name" v-if="hasAvatar">{{userName}}</span>
-    <div class="message-container" style="display: flex;">
+    <div v-if="hasAvatar" class="user-avatar-container"> 
       <md-avatar v-if="hasAvatar">
         <img :src="baseURL + '/api/user/avatar/' + message.userId" alt="Avatar" />
       </md-avatar>
+      <span class="message-user-name">{{userName}}</span>
+    </div>
+    <div class="message-container" style="display: flex;">
       <div v-if="message.photos && message.photos.length" :style="{
-        marginLeft: !hasAvatar ? '50px' : '10px'
+        marginLeft: '30px'
       }">
         <div v-if="message.photos.length > 1" class="message-photo-list">
           <img v-for="(photo, idx) in message.photos" :key="idx" 
@@ -31,7 +33,7 @@
       </div>
       <div v-if="message.files && message.files.length" class="message-file-list" 
         :style="{
-          marginLeft: !hasAvatar ? '50px' : '10px'
+          marginLeft: '30px'
         }">
         <div v-for="(file, idx) in message.files" :key="idx" class="message-file" 
           @click="handleFileDownload(file.id)">
@@ -40,7 +42,7 @@
         </div>
       </div>
       <p v-if="message.content" :style="{
-        marginLeft: !hasAvatar ? '50px' : '10px'
+        marginLeft: '30px'
       }">
         {{message.content}}
       </p>
@@ -134,8 +136,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.message-container {
+.user-avatar-container {
   margin-left: 20px;
+}
+.message-container {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -153,7 +157,6 @@ export default {
   margin: 0;
 }
 .message-user-name {
-  margin-left: 20px;
   margin-bottom: 5px;
   font-weight: 500;
 }

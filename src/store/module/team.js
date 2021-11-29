@@ -30,7 +30,7 @@ const team = {
       state.teams = teams
       state.loading = false
     },
-    changePaginationOffset(state, { num }) {
+    changeTeamPaginationOffset(state, { num }) {
       state.paginationOffset += num
     },
     setTeam(state, { team }) {
@@ -90,6 +90,20 @@ const team = {
     setMessages(state, { teamId, messages }) {
       if (teamId == state.team.id) {
         state.team.messages = messages
+      }
+    },
+    editTeam(state, { team }) {
+      state.team = {
+        ...state.team,
+        ...team
+      }
+      let idx = state.teams.findIndex(t => t.id == state.team.id)
+      if (idx >= 0) {
+        let _term = { ...state.teams[idx] }
+        for (const key of Object.keys(team)) {
+          _term[key] = team[key]
+        }
+        state.teams.splice(idx, 1, _term)
       }
     },
     setLoading(state) {
@@ -206,6 +220,16 @@ const team = {
           let { messages } = response.data
           context.commit('setMessages', { teamId, messages })
         }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async editTeam(context, { teamName, isPublicTeam, coverPhoto }) {
+      try {
+        let teamId = context.state.team.id
+        let response = await services.editTeam({ teamName, coverPhoto, isPublicTeam, teamId })
+        let { team } = response.data
+        context.commit('editTeam', { team })
       } catch (error) {
         console.log(error)
       }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-dialog :md-active.sync="isPreview" >
+    <md-dialog :md-active.sync="isPreview" :md-close-on-esc="false">
       <md-dialog-content>
         <img width="100%" height="100%" :src="imgPath + '/'  + messageId + '/' + photoId" />
       </md-dialog-content>

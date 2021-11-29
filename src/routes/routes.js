@@ -3,7 +3,7 @@ import Dashboard from "@/pages/Dashboard.vue";
 import Profile from "@/pages/Profile.vue";
 import Users from "@/pages/Users.vue";
 import Teams from "@/pages/Teams.vue";
-import Meeting from "@/pages/Meeting.vue";
+import Meetings from "@/pages/Meetings.vue";
 import Support from "@/pages/Support.vue";
 import Team from '../components/Team/Team.vue'
 import TeamMessages from '../components/Team/TeamMessages.vue'
@@ -59,7 +59,7 @@ const routes = [
       {
         path: "meetings",
         name: "Meetings",
-        component: Meeting,
+        component: Meetings,
       },
       {
         path: "support",

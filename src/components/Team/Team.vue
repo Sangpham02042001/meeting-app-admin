@@ -5,7 +5,13 @@
     </router-link>
     <div class="team-intro">
       <div> 
-        <h3><strong>Team:</strong> {{team.name}}</h3>
+        <h3 style="display: flex; align-items: center;">
+          <strong>Team:</strong> {{team.name}}
+          <span class="team-edit-button" @click="showEditTeamDialog = true">
+            <md-icon>edit</md-icon>
+          </span>
+        </h3>
+        <div><strong>Team type:</strong> {{team.teamType}} </div>
         <div> 
           <strong>Created by: </strong> 
           <span> 
@@ -25,8 +31,8 @@
       <!-- <md-avatar>
         <img :src="baseURL + '/api/team/coverphoto/' + team.id" alt="Avatar">
       </md-avatar> -->
-      <div class="team-avatar" :style="{
-        backgroundImage: 'url(' + baseURL + '/api/team/coverphoto/' + team.id + ')'
+      <div class="team-avatar" :key="team.coverPhoto" :style="{
+        backgroundImage: 'url(' + baseURL + '/api/team/coverphoto/' + team.id + '?key=' + team.coverPhoto + ')'
       }"> 
       </div>
     </div>
@@ -182,6 +188,25 @@
       md-cancel-text="Disagree"
       @md-cancel="onCancelConfirmRequest"
       @md-confirm="onConfirmRequest" />
+
+    <md-dialog :md-active.sync="showEditTeamDialog">
+      <md-dialog-title>Edit team</md-dialog-title>
+      <md-dialog-content>
+        <md-field>
+          <label>Team name</label>
+          <md-input v-model="teamName"></md-input>
+        </md-field>
+        <md-checkbox v-model="isPublicTeam">Public Team</md-checkbox>
+        <md-field>
+          <label>Team Coverphoto</label>
+          <md-file v-model="image" @change="onImageChange" accept="image/*" />
+        </md-field>
+      </md-dialog-content>
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="cancelEdit">Cancel</md-button>
+        <md-button class="md-primary" @click="comfirmEdit">Save</md-button>
+      </md-dialog-actions>
+    </md-dialog>
   </div>
 </template>
 
@@ -198,7 +223,12 @@ export default {
       showRemoveMemberDialog: false,
       showRemoveInvitationDialog: false,
       showRemoveRequestDialog: false,
-      showConfirmRequestDialog: false
+      showConfirmRequestDialog: false,
+      showEditTeamDialog: false,
+      teamName: '',
+      isPublicTeam: true,
+      coverPhoto: null,
+      image: ''
     }
   },
   computed: {
@@ -210,7 +240,7 @@ export default {
     }),
     baseURL() {
       return baseURL
-    }
+    },
   },
   mounted() {
     if (!this.isLoaded) {
@@ -298,6 +328,28 @@ export default {
       })
       this.selectedUserId = null
       this.showConfirmRequestDialog = false
+    },
+
+    cancelEdit() {
+      this.showEditTeamDialog = false
+      this.teamName = this.team.name
+      this.isPublicTeam = this.team.teamType === 'public'
+      this.image = ''
+      this.coverPhoto = null
+    },
+    comfirmEdit() {
+      this.showEditTeamDialog = false
+      this.$store.dispatch('editTeam', {
+        teamName: this.teamName,
+        isPublicTeam: this.isPublicTeam,
+        coverPhoto: this.coverPhoto
+      })
+    },
+    onImageChange(e) {
+      if (e.target.files.length) {
+        const file = e.target.files[0];
+        this.coverPhoto = file;
+      }
     }
   },
   watch: {
@@ -313,6 +365,12 @@ export default {
         this.selectedUserId = null
         this.showRemoveMemberDialog = false
         this.$store.dispatch('getTeamInfo', {teamId: Number(this.$route.params.teamId)})
+      }
+    },
+    'team'(newVal) {
+      if (newVal.name) {
+        this.teamName = newVal.name
+        this.isPublicTeam = newVal.teamType === 'public'
       }
     }
   },
@@ -374,5 +432,8 @@ p {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+}
+.team-edit-button {
+  cursor: pointer;
 }
 </style>

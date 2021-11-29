@@ -23,7 +23,6 @@ const teamServices = {
     return axiosAuth.delete(`/api/teams/${teamId}`)
   },
   addTeam: ({ teamName, hostId, coverPhoto, isPublicTeam }) => {
-    console.log(coverPhoto)
     let teamType = isPublicTeam ? 'public' : 'private'
     let formData = new FormData()
     formData.append('name', teamName)
@@ -31,6 +30,14 @@ const teamServices = {
     formData.append('coverPhoto', coverPhoto)
     formData.append('teamType', teamType)
     return axiosAuth.post('/api/teams', formData)
+  },
+  editTeam: ({ teamName, coverPhoto, isPublicTeam, teamId }) => {
+    let teamType = isPublicTeam ? 'public' : 'private'
+    let formData = new FormData()
+    formData.append('name', teamName)
+    formData.append('coverPhoto', coverPhoto)
+    formData.append('teamType', teamType)
+    return axiosAuth.put(`/api/teams/${teamId}`, formData)
   },
   removeMembers: ({ teamId, userId }) => {
     return axiosAuth.put(`/api/teams/${teamId}/remove-members`, {

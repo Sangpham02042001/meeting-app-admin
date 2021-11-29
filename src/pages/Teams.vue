@@ -46,8 +46,8 @@
         <md-table-head>Actions</md-table-head>
       </md-table-row>
 
-      <md-table-row v-for="team in filteredTeams" :key="team.id">
-        <md-table-cell md-numeric>{{ team.id }}</md-table-cell>
+      <md-table-row v-for="team in filteredTeams" :key="team.id + team.name + team.teamType">
+        <md-table-cell md-numeric>{{team.id}}</md-table-cell>
         <md-table-cell>
           <router-link :to="'/teams/' + team.id">
             {{ team.name }}
@@ -179,16 +179,10 @@ export default {
       this.searchTeamName = name;
     },
     increasePaginationOffset() {
-      !this.isDisableInc &&
-        this.$store.commit("changePaginationOffset", {
-          num: this.paginationNumber,
-        });
+      !this.isDisableInc && this.$store.commit('changeTeamPaginationOffset', {num: this.paginationNumber})
     },
     decreasePaginationOffset() {
-      !this.isDisableDecs &&
-        this.$store.commit("changePaginationOffset", {
-          num: -this.paginationNumber,
-        });
+      !this.isDisableDecs && this.$store.commit('changeTeamPaginationOffset', {num: -this.paginationNumber})
     },
     showDeleteDialog(teamId) {
       this.selectedTeam = teamId;
@@ -221,9 +215,11 @@ export default {
       this.$store.dispatch("addTeam", { newTeam: this.newTeam });
     },
     onImageChange(e) {
-      const file = e.target.files[0];
-      this.newTeam.coverPhoto = file;
-    },
+      if (e.target.files.length) {
+        const file = e.target.files[0];
+        this.newTeam.coverPhoto = file;
+      }
+    }
   },
   watch: {
     "teams.length"(newVal) {
