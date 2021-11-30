@@ -23,6 +23,10 @@
         <md-icon>contact_phone</md-icon>
         <p>Meeting</p>
       </sidebar-link>
+      <sidebar-link to="/notifications">
+        <md-icon>notifications</md-icon>
+        <p>Notifications</p>
+      </sidebar-link>
       <sidebar-link to="/support">
         <md-icon>contact_support</md-icon>
         <p>Support</p>
