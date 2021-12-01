@@ -27,6 +27,10 @@
         <md-icon>notifications</md-icon>
         <p>Notifications</p>
       </sidebar-link>
+      <sidebar-link to="/messages">
+        <md-icon>mode_comment</md-icon>
+        <p>Messages</p>
+      </sidebar-link>
       <sidebar-link to="/support">
         <md-icon>contact_support</md-icon>
         <p>Support</p>

@@ -5,6 +5,7 @@ import team from './module/team'
 import auth from './module/auth'
 import meeting from './module/meeting'
 import notification from './module/notification'
+import message from './module/message'
 
 Vue.use(Vuex);
 
@@ -14,7 +15,8 @@ const store = new Vuex.Store({
         team,
         auth,
         meeting,
-        notification
+        notification,
+        message
     }
 });
 export default store;

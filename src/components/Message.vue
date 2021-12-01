@@ -39,10 +39,13 @@
           :style="{
             marginLeft: hasAvatar ? '10px' : '50px'
           }">
-          <div v-for="(file, idx) in message.files" :key="idx" class="message-file" 
-            @click="handleFileDownload(file.id)">
-            <md-icon>description</md-icon>
-            {{file.name}}
+          <div v-for="(file, idx) in message.files" :key="idx" class="message-file">
+            <audio v-if="file.type == 'audio'" :src="baseURL + '/api/messages/files/' + message.id + '/' + file.id" controls
+              style="height: 30px"/>
+            <div v-else @click="handleFileDownload(file.id)">
+              <md-icon>description</md-icon>
+              {{file.name}}
+            </div>
           </div>
         </div>
         <p v-if="message.content" :style="{

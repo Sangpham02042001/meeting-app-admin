@@ -5,6 +5,7 @@ import Users from "@/pages/Users.vue";
 import Teams from "@/pages/Teams.vue";
 import Meetings from "@/pages/Meetings.vue";
 import Notifications from "@/pages/Notifications.vue";
+import Messages from "@/pages/Messages.vue"
 import Support from "@/pages/Support.vue";
 import Team from '../components/Team/Team.vue'
 import TeamMessages from '../components/Team/TeamMessages.vue'
@@ -72,6 +73,11 @@ const routes = [
         path: 'notifications',
         name: 'Notifications',
         component: Notifications
+      },
+      {
+        path: 'messages',
+        name: 'Messages',
+        component: Messages
       },
       {
         path: "support",
