@@ -2,7 +2,7 @@
   <div>
     <md-dialog :md-active.sync="isPreview" :md-close-on-esc="false">
       <md-dialog-content>
-        <img width="100%" height="100%" :src="imgPath + '/'  + messageId + '/' + photoId" />
+        <img width="100%" height="100%" :src="imgPath + '/'  + messageId + '/image/' + photoId" />
       </md-dialog-content>
     </md-dialog>
 
@@ -40,7 +40,7 @@ export default {
   methods: {
     handleImageDownload(event) {
       event.preventDefault()
-      window.open(`${this.baseURL}/api/messages/photos/${this.messageId}/${this.photoId}`)
+      window.open(`${this.baseURL}/api/messages/${this.messageId}/photos/${this.photoId}`)
     }
   }
 }

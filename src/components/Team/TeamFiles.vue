@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     handleDownload(messageId, fileId) {
-      window.open(`${this.baseURL}/api/messages/files/${messageId}/${fileId}`)
+      window.open(`${this.baseURL}/api/messages/${messageId}/files/${fileId}`)
     }
   }
 }

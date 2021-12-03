@@ -7,7 +7,7 @@
       <div
         v-for="(img, idx) in team.images" :key="idx"
         @click="handlePreviewImage(img.messageId, img.id)"
-        :style="{backgroundImage: `url(${imgPath}/${img.messageId}/${img.id})`}"></div>
+        :style="{backgroundImage: `url(${imgPath}/${img.messageId}/image/${img.id})`}"></div>
     </div>
     <h5 v-else>No image in this team</h5>
     <preview-image :is-preview="isPreview" :on-close="closePreview"

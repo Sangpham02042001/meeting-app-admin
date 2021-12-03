@@ -17,7 +17,7 @@
           <div v-if="message.photos.length > 1" class="message-photo-list">
             <img v-for="(photo, idx) in message.photos" :key="idx" 
               @click="handlePreviewImg(message.id, photo.id)"
-              :src="baseURL + '/api/messages/' + message.id + '/' + photo.id"
+              :src="baseURL + '/api/messages/' + message.id + '/image/' + photo.id"
               :class="hasAvatar ? 'photo-last-message' : ''"
               :style="{
                 width: getImageSize(message.photos.length).itemWidth,
@@ -27,7 +27,7 @@
           <div v-else class="message-photo-list">
             <img v-for="(photo, idx) in message.photos" :key="idx" 
               @click="handlePreviewImg(message.id, photo.id)"
-              :src="baseURL + '/api/messages/' + message.id + '/' + photo.id"
+              :src="baseURL + '/api/messages/' + message.id + '/image/' + photo.id"
               :class="hasAvatar ? 'photo-last-message' : ''"
               :style="{
                 maxWidth: getImageSize(message.photos.length).itemWidth,
@@ -40,7 +40,7 @@
             marginLeft: hasAvatar ? '10px' : '50px'
           }">
           <div v-for="(file, idx) in message.files" :key="idx" class="message-file">
-            <audio v-if="file.type == 'audio'" :src="baseURL + '/api/messages/files/' + message.id + '/' + file.id" controls
+            <audio v-if="file.type == 'audio'" :src="baseURL + '/api/messages/' + message.id + '/files/' + file.id" controls
               style="height: 30px"/>
             <div v-else @click="handleFileDownload(file.id)">
               <md-icon>description</md-icon>
@@ -133,7 +133,7 @@ export default {
     },
     handlePreviewImg(messageId, photoId) {
       this.selectedPhotoId = photoId
-      this.imagePreviewUrl = this.baseURL + '/api/messages/' + this.message.id + '/' + photoId
+      this.imagePreviewUrl = this.baseURL + '/api/messages/' + this.message.id + '/image/' + photoId
       this.isPreviewImg = true 
     },
     handleClose() {
@@ -142,10 +142,10 @@ export default {
       this.isPreviewImg = false
     },
     handleImageDownload() {
-      window.open(`${this.baseURL}/api/messages/photos/${this.message.id}/${this.selectedPhotoId}`)
+      window.open(`${this.baseURL}/api/messages/${this.message.id}/photos/${this.selectedPhotoId}`)
     },
     handleFileDownload(fileId) {
-      window.open(`${this.baseURL}/api/messages/files/${this.message.id}/${fileId}`)
+      window.open(`${this.baseURL}/api/messages/${this.message.id}/files/${fileId}`)
     },
     handleDelete() {
       if (this.message.teamId) {
