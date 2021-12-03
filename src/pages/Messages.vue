@@ -39,8 +39,8 @@
         <md-table-head md-numeric>{{message.id}}</md-table-head>
         <md-table-head>{{message.content}}</md-table-head>
         <md-table-head>{{message.user.firstName + ' ' + message.user.lastName}}</md-table-head>
-        <md-table-head>{{message.medias.filter(m => m.type == 'file').length}}</md-table-head>
-        <md-table-head>{{message.medias.filter(m => m.type == 'image').length}}</md-table-head>
+        <md-table-head>{{message['Media'].filter(m => m.type == 'file').length}}</md-table-head>
+        <md-table-head>{{message['Media'].filter(m => m.type == 'image').length}}</md-table-head>
         <md-table-head>{{ getTime(message.createdAt) }}</md-table-head>
         <md-table-head md-numeric>{{message.teamId}}</md-table-head>
         <md-table-head md-numeric>{{message.conversationId}}</md-table-head>
