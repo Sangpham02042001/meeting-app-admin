@@ -31,9 +31,9 @@
         <md-icon>mode_comment</md-icon>
         <p>Messages</p>
       </sidebar-link>
-      <sidebar-link to="/support">
-        <md-icon>contact_support</md-icon>
-        <p>Support</p>
+      <sidebar-link to="/feedbacks">
+        <md-icon>report_problem</md-icon>
+        <p>Feedbacks</p>
       </sidebar-link>
       <sidebar-link to="/profile" class="active-pro">
         <md-icon>person</md-icon>

@@ -6,6 +6,7 @@ import auth from './module/auth'
 import meeting from './module/meeting'
 import notification from './module/notification'
 import message from './module/message'
+import feedback from './module/feedback'
 
 Vue.use(Vuex);
 
@@ -16,7 +17,8 @@ const store = new Vuex.Store({
         auth,
         meeting,
         notification,
-        message
+        message,
+        feedback
     }
 });
 export default store;
